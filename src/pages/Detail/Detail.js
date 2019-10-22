@@ -5,6 +5,7 @@ import {detailUrl} from "../../queryUrl";
 import LinuxLogo from '../../images/linux_logo.svg';
 import marked from 'marked';
 import './Detail.less';
+
 var hljs = require('highlight.js');
 
 
@@ -15,16 +16,21 @@ const {Option} = Select;
 const queryString = require('query-string');
 const md = require('markdown-it')({
     html: true,
+    linkify: true,
+    typographer: true,
     highlight: function (str, lang) {
         console.log(str, lang);
         if (lang && hljs.getLanguage(lang)) {
             try {
-                return hljs.highlight(lang, str).value;
+                return '<pre class="hljs"><code>' +
+                    hljs.highlightAuto(str).value +
+                    // hljs.highlight(lang, str, true).value +
+                    '</code></pre>';
             } catch (__) {
             }
         }
 
-        return ''; // use external default escaping
+        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
     }
 });
 
@@ -42,7 +48,18 @@ class Detail extends Component {
     }
 
     componentWillMount() {
-
+        marked.setOptions({
+            renderer: new marked.Renderer(),
+            gfm: true,
+            breaks: true,
+            pedantic: false,
+            sanitize: true,
+            smartLists: true,
+            smartypants: false,
+            highlight: function (code) {
+                return hljs.highlightAuto(code).value;
+            },
+        });
     }
 
     async componentDidMount() {
@@ -60,6 +77,8 @@ class Detail extends Component {
         let res = await axios.get(detailUrl(title));
         if (res) {
             this.setState({
+                context: res.data.context,
+                markedContent: marked(res.data.context),
                 content: md.render(res.data.context),
                 title: res.data.title
             });
@@ -103,22 +122,19 @@ class Detail extends Component {
                         </Col>
                     </Row>
                 </div>
+
                 <div style={{
                     marginTop: '60px'
                 }}>
-                    <Typography>
-                        {/*    <Paragraph>*/}
-                        <div className={"markdown-body"} dangerouslySetInnerHTML={{__html: this.state.content}}/>
-                        {/*<ReactMarkdown source={this.state.content} skipHtml={true}/>*/}
-                        {/*</Paragraph>*/}
-                    </Typography>
-                    {/*<div*/}
-                    {/*    id="content"*/}
-                    {/*    className="article-detail"*/}
-                    {/*    dangerouslySetInnerHTML={{*/}
-                    {/*        __html: marked(this.state.content),*/}
-                    {/*    }}*/}
-                    {/*/>*/}
+                    <div>
+                    <pre><code>
+                        console.log(1234)
+                    </code></pre>
+                    </div>
+                    <div className={"markdown-body"} dangerouslySetInnerHTML={{__html: this.state.content}}/>
+                    {/*<ReactMarkdown source={this.state.content} skipHtml={true}/>*/}
+
+                    {/*<div className={"markdown-body"} dangerouslySetInnerHTML={{__html: this.state.markedContent}}/>*/}
                 </div>
             </div>
         )

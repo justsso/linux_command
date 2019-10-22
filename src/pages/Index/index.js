@@ -1,15 +1,32 @@
-import React, {Component, useState, useEffect} from "react";
+import React, {Component, useState} from "react";
 import axios from 'axios';
-import {Button, Layout, Row, Col, Input, List, Select, Spin, Typography, Divider} from "antd";
+import {Row, Col, Select, Spin} from "antd";
 import debounce from 'lodash/debounce';
 import LinuxLogo from '../../images/linux_logo.svg';
 import {selectUrl, detailUrl} from "../../queryUrl";
 import './index.less';
 
-const {Header, Content, Footer} = Layout;
-const {Search} = Input;
+var hljs = require('highlight.js');
+
 const {Option} = Select;
-const {Text, Paragraph, Title} = Typography;
+const md = require('markdown-it')({
+    html: true,
+    linkify: true,
+    typographer: true,
+    highlight: function (str, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            try {
+                return '<pre class="hljs"><code>' +
+                    hljs.highlightAuto(str).value +
+                    // hljs.highlight(lang, str, true).value +
+                    '</code></pre>';
+            } catch (__) {
+            }
+        }
+
+        return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+    }
+});
 
 function Index() {
     const [searchInput, setSearchInput] = useState('');
@@ -18,16 +35,11 @@ function Index() {
     const [loading, setLoading] = useState(false);
     const [content, setContent] = useState('');
 
-    //每次渲染之后执行
-    // useEffect(async () => {
-    //     let res = await axios.get(selectUrl(searchInput));
-    //     setResultList(res.data)
-    // });
 
     return (
         <div>
             <Row type={"flex"} justify={"center"} align={"middle"} style={{
-                marginBottom: '50px'
+                marginBottom: '30px'
             }}>
                 <Col>
                     <img src={LinuxLogo} alt="" className={'linux-logo'}/>
@@ -38,10 +50,10 @@ function Index() {
             </Row>
             {/*搜索框*/}
             <Row type={"flex"} justify={"center"} gutter={{xs: 1, sm: 1, md: 1, lg: 1, xl: 1}}>
-                <Col xs={18} sm={14} md={14} lg={8} xl={8}>
+                <Col xs={18} sm={14} md={14} lg={12} xl={8}>
                     <Select
-                        allowClear={true}
                         autoFocus={true}
+                        defaultActiveFirstOption={true}
                         value={searchInput}
                         showArrow={false}
                         showSearch={true} //使单选模式可搜索
@@ -49,22 +61,17 @@ function Index() {
                         placeholder="输入"
                         notFoundContent={showResultList ? <Spin size="small"/> : null}
                         filterOption={false}
-                        onInputKeyDown={(e) => {
-                            console.log(e.keyCode, 67)
-                            if (e.keyCode === 13) {
-                                //回车键
-
-                            }
-                        }}
                         onSearch={(value) => {
                             // 文本框值变化时回调
                             console.log('onSearch', value);
                             setSearchInput(value);
                             setLoading(true);
-                            axios.get(selectUrl(value)).then(res => {
-                                setResultList(res.data);
-                                setLoading(false)
-                            })
+                            if (value !== "") {
+                                axios.get(selectUrl(value)).then(res => {
+                                    setResultList(res.data);
+                                    setLoading(false)
+                                })
+                            }
                         }}
 
                         //被选中时调用，参数为选中项的 value (或 key) 值
@@ -74,12 +81,14 @@ function Index() {
                             if (option) {
                                 let __value = option.props.value.replace('<span>', "").replace("</span>", "");
                                 setSearchInput(option.props.title);
-                                window.location.href = '/detail?title=' + option.props.title;
+                                axios.get(detailUrl(option.props.title)).then(res => {
+                                    setContent(md.render(res.data.context))
+                                })
                             } else {
                                 setSearchInput(value)
                             }
-
                         }}
+                        //选中 option，或 input 的 value 变化（combobox 模式下）时，调用此函数
                         onChange={(value, option) => {
                             console.log(value, 'onChange');
                             if (option) {
@@ -89,9 +98,6 @@ function Index() {
 
                             }
                             setResultList([])
-                        }}
-                        onBlur={() => {
-                            setLoading(false)
                         }}
                         style={{width: '100%'}}
                         loading={loading}
@@ -112,35 +118,13 @@ function Index() {
                     </Select>
                     <p>* 通配符，全匹配</p>
                 </Col>
-                <Col xs={4} sm={2} md={2} lg={2} xl={2}>
-                    <Button size={'large'} type={'primary'}>搜索</Button>
-                </Col>
             </Row>
-            {/*搜索列表*/}
-            {/*<Row type={"flex"} justify={"center"}>*/}
-            {/*    <Col xs={22} sm={14} md={14} lg={8} xl={8}>*/}
-            {/*        <List*/}
-            {/*            dataSource={resultList}*/}
-            {/*            renderItem={(item, index) => {*/}
-            {/*                return <List.Item*/}
-            {/*                >*/}
-            {/*                    <List.Item.Meta*/}
-            {/*                        title={item.title}*/}
-            {/*                        description={<div dangerouslySetInnerHTML={{__html: item.data}}></div>}*/}
-            {/*                    >*/}
-            {/*                        /!*{item.title}*!/*/}
-            {/*                        /!*{item.data}*!/*/}
-            {/*                    </List.Item.Meta>*/}
-            {/*                </List.Item>*/}
-            {/*            }}*/}
-            {/*        >*/}
-            {/*        </List>*/}
-            {/*    </Col>*/}
-            {/*</Row>*/}
-            {/*搜索详情*/}
-            <Row>
-                <Col>
 
+            {/*搜索详情*/}
+            <Row type={"flex"} justify={"center"} align={"middle"}>
+                <Col xs={24} sm={24} md={16} lg={14} xl={14}>
+                    <div className={"markdown-body"} dangerouslySetInnerHTML={{__html: content}}>
+                    </div>
                 </Col>
             </Row>
         </div>

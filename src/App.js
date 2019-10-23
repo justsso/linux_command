@@ -14,6 +14,7 @@ function App() {
                 <Content style={{background: '#fff'}}>
                     <Switch>
                         <Route path="/" exact children={<Main/>}/>
+                        <Route path={"/first"} exact children={<Index/>}/>
                     </Switch>
                 </Content>
             </Layout>

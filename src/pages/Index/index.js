@@ -1,7 +1,6 @@
 import React, {Component, useState} from "react";
 import axios from 'axios';
 import {Row, Col, Select, Spin} from "antd";
-import debounce from 'lodash/debounce';
 import LinuxLogo from '../../images/linux_logo.svg';
 import {selectUrl, detailUrl} from "../../queryUrl";
 import './index.less';
@@ -23,7 +22,6 @@ const md = require('markdown-it')({
             } catch (__) {
             }
         }
-
         return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
     }
 });

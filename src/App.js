@@ -3,6 +3,7 @@ import './App.css';
 import Index from "./pages/Index";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {Layout} from "antd";
+import Main from "./pages/Main/Main";
 
 const {Content, Footer} = Layout;
 
@@ -12,10 +13,9 @@ function App() {
             <Layout>
                 <Content style={{background: '#fff'}}>
                     <Switch>
-                        <Route path="/" exact children={<Index/>}/>
+                        <Route path="/" exact children={<Main/>}/>
                     </Switch>
                 </Content>
-                <Footer style={{background: '#fff'}}/>
             </Layout>
         </Router>
     );

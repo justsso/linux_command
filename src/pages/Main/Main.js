@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
-import {Col, Icon} from "antd";
+import React, {Component, createRef} from 'react';
+import {Icon} from "antd";
 import clsx from "clsx";
 import './Main.less';
 import MyItem from "./MyItem/MyItem";
 import axios from 'axios';
 import {selectUrl, detailUrl} from "../../queryUrl";
+import TpoImg from '../../images/top_icon.png';
+import './animation';
 
 var hljs = require('highlight.js');
 const md = require('markdown-it')({
@@ -38,9 +40,10 @@ class Main extends Component {
             list: [],
             value: "",
             isBgGrey: false,
-            contentWidth: '50%'
+            contentWidth: '50%',
+            showBackTop: false
         };
-
+        this.container = createRef();
         this.closeAll = this.closeAll.bind(this);
         this.getDetail = this.getDetail.bind(this);
     }
@@ -74,9 +77,10 @@ class Main extends Component {
     }
 
     render() {
-        let {layerShow, fixSearchBar, contentThen, list, value, isBgGrey, content, contentWidth} = this.state;
+        let {layerShow, fixSearchBar, contentThen, list, value, isBgGrey, content, contentWidth, showBackTop} = this.state;
         return (
             <div className={'container'}
+                 ref={this.container}
                  style={{
                      background: isBgGrey ? '#ededed' : '#fff',
                      transition: 'all .4s ease'
@@ -89,6 +93,17 @@ class Main extends Component {
                      }
                      // e.stopPropagation();
                  }}
+                 onScroll={(e) => {
+                     if (this.container.current.scrollTop > 400) {
+                         this.setState({
+                             showBackTop: true
+                         })
+                     } else {
+                         this.setState({
+                             showBackTop: false
+                         })
+                     }
+                 }}
             >
                 <div className={clsx(
                     {
@@ -98,7 +113,6 @@ class Main extends Component {
                 )}
                      style={{
                          width: contentWidth,
-                         transition: 'width .5s ease'
                      }}
                 >
                     <div className={clsx(
@@ -124,6 +138,12 @@ class Main extends Component {
                             <div className={"markdown-body"} dangerouslySetInnerHTML={{__html: content}}>
                             </div>
                         </div>
+
+                        <div className="layer_text" style={{
+                            display: list.length === 0 && content === "" ? 'block' : 'none'
+                        }}>
+                            Quickly switch to command
+                        </div>
                     </div>
                     <div className={clsx({
                         search_bar: true, md_radio: true,
@@ -136,7 +156,7 @@ class Main extends Component {
                             }}/>
                         </div>
                         <div style={{flex: 1}}>
-                            <input placeholder={"Quick Access"}
+                            <input placeholder={"Search Now"}
                                    type={"text"}
                                    value={value}
                                    onFocus={(e) => {
@@ -164,6 +184,19 @@ class Main extends Component {
                             />
                         </div>
                     </div>
+                </div>
+                <div style={{
+                    position: "fixed",
+                    transform: showBackTop ? 'scale(1)' : 'scale(0)'
+                }} className={"back_top"} onClick={() => {
+                    console.log(this.container.current.scrollTop, 185);
+                    let scrollTpo = this.container.current.scrollTop;
+                    let that = this;
+                    Math.animation(scrollTpo, 0, function (value) {
+                        that.container.current.scrollTop = value;
+                    }, 'Back.easeInOut', 500);
+                }}>
+                    <img src={TpoImg} className={"top_icon"}/>
                 </div>
             </div>
         )

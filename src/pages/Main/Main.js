@@ -58,7 +58,8 @@ class Main extends Component {
             isBgGrey: false,
             value: "",
             list: [],
-            content: ""
+            content: "",
+            contentWidth: "50%"
             // contentThen: false
         })
     }

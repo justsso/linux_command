@@ -109,11 +109,6 @@ class Main extends Component {
                             my_fadeIn: layerShow
                         }
                     )}>
-                        <div className="cancel_container" onClick={() => {
-                            this.closeAll();
-                        }}>
-                            <span>Cancel</span>
-                        </div>
 
                         <div className="list">
                             {

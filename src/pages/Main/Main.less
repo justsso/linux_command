@@ -34,16 +34,17 @@
     min-height: 200px;
     position: absolute;
     background: #fff;
-    padding: 20px 30px;
+    //padding: 20px 30px;
     display: none;
 
     .list {
       margin-top: @baseHeight;
       position: relative;
+      left: 5%;
       background: #fff;
       width: 90%;
       box-sizing: border-box;
-      padding: 20px 0 10px 0;
+      padding: 30px 0 10px 0;
       z-index: 10;
       max-height: 400px;
       overflow-y: scroll;
@@ -51,6 +52,8 @@
     }
 
     .command_detail {
+      width: 96%;
+      margin: 0 auto;
       z-index: 5;
       transition: all 1s ease-in-out;
     }
@@ -70,7 +73,7 @@
   }
 
   .search_bar {
-    width: 78%;
+    width: 90%;
     box-sizing: border-box;
     position: absolute;
     display: flex;
@@ -146,7 +149,6 @@
   }
 
   .fix_search_bar {
-    left: 20px;
     top: 20px;
   }
 

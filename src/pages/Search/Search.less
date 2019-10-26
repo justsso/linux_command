@@ -1,0 +1,124 @@
+@bgColor: #edeced;
+@baseHeight: 44px;
+@baseFontSize: 20px;
+@bgSearchBar: #f5f5f5;
+
+
+.page_con {
+  width: 50%;
+  margin: 20px auto;
+  .md_radio();
+  padding: 20px;
+  transform: translateY(100px);
+  transition: all .3s ease-in-out;
+  background: rgba(255, 255, 255, 0);
+
+  //搜索框
+  .search_bar {
+    width: 80%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    display: flex;
+    align-content: center;
+    background: @bgSearchBar;
+    padding: 5px 20px;
+    transition: all .1s ease-out;
+    .md_radio();
+
+    &_icon {
+      display: flex;
+      align-items: center;
+      height: @baseHeight;
+      margin-right: 10px;
+      line-height: @baseHeight;
+      vertical-align: bottom;
+    }
+
+    .input_con {
+      flex: 1;
+    }
+
+
+    input {
+      width: 100%;
+      height: @baseHeight;
+      transition: all 0.5s cubic-bezier(.87, -.41, .19, 1.44);
+      background: transparent;
+      font-size: @baseFontSize;
+      letter-spacing: 1px;
+
+      &::placeholder {
+        color: #ccc;
+        font-size: @baseFontSize;
+      }
+    }
+
+    input.active {
+      width: 100%;
+      padding-left: 25px;
+      border-radius: 36px;
+    }
+
+
+    .active:before {
+      transform: scale(1);
+      transition-delay: 0.3s;
+      animation: 0.6s cubic-bezier(.87, -.41, .19, 1.44) 0.5s infinite forwards focus;
+    }
+  }
+
+  //搜索面板默认文字
+  .text {
+    font-size: @baseFontSize * 1.2;
+    text-align: center;
+    margin: 30px auto;
+    color: @bgColor;
+  }
+
+  //md文档
+  .command_detail {
+    width: 96%;
+    margin: 20px auto;
+    z-index: 5;
+    transition: all 1s ease-in-out;
+  }
+
+
+  .shadow4 {
+    box-shadow: 0 0 20px #ccc;
+  }
+
+  .md_radio {
+    border-radius: 20px;
+  }
+
+  .box_show {
+    display: block;
+  }
+
+  .box_hide {
+    display: none;
+  }
+
+  .bg_grey {
+    background: @bgColor;
+  }
+
+  .top {
+    transform: translateY(0);
+  }
+
+}
+
+.top {
+  transform: translateY(0);
+}
+
+@keyframes toTop {
+  from {
+    transform: translateY(-100px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

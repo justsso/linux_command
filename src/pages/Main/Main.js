@@ -9,7 +9,7 @@ import TpoImg from '../../images/top_icon.png';
 import './animation';
 
 var hljs = require('highlight.js');
-const md = require('markdown-it')({
+let md = require('markdown-it')({
     html: true,
     linkify: true,
     typographer: true,
@@ -49,6 +49,10 @@ class Main extends Component {
     }
 
     componentDidMount() {
+    }
+
+    componentWillUnmount() {
+        md = null;
     }
 
     closeAll() {
@@ -119,8 +123,6 @@ class Main extends Component {
                     <div className={clsx(
                         {
                             layer: true,
-                            shadow4: true,
-                            md_radio: true,
                             my_fadeIn: layerShow
                         }
                     )}>
@@ -147,7 +149,7 @@ class Main extends Component {
                         </div>
                     </div>
                     <div className={clsx({
-                        search_bar: true, md_radio: true,
+                        search_bar: true,
                         fix_search_bar: fixSearchBar
                     })}>
                         <div className={"search_bar_icon"}>
@@ -176,11 +178,13 @@ class Main extends Component {
                                            content: "",
                                            contentWidth: "50%"
                                        });
-                                       axios.get(selectUrl(value)).then(res => {
-                                           this.setState({
-                                               list: res.data
+                                       if (value !== "") {
+                                           axios.get(selectUrl(value)).then(res => {
+                                               this.setState({
+                                                   list: res.data
+                                               })
                                            })
-                                       })
+                                       }
                                    }}
                             />
                         </div>

@@ -11,7 +11,7 @@
   padding: 20px;
   transform: translateY(100px);
   transition: all .3s ease-in-out;
-  background: rgba(255, 255, 255, 0);
+  background: #fff;
 
   //搜索框
   .search_bar {
@@ -83,7 +83,6 @@
     transition: all 1s ease-in-out;
   }
 
-
   .shadow4 {
     box-shadow: 0 0 20px #ccc;
   }
@@ -107,7 +106,30 @@
   .top {
     transform: translateY(0);
   }
+}
+//返回顶部按钮
+.third_back_top {
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  background: transparent;
 
+  .back_top_content {
+    border-radius: 50%;
+    transition: all .3s ease-in-out;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    box-shadow: 0 0 20px #ccc;
+  }
+
+  .top_icon {
+    width: @baseFontSize * 2;
+    height: @baseFontSize * 2;
+  }
 }
 
 .top {

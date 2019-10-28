@@ -41,7 +41,9 @@ class Main extends Component {
             value: "",
             isBgGrey: false,
             contentWidth: '50%',
-            showBackTop: false
+            showBackTop: false,
+            showText: false,
+            content: ""
         };
         this.container = createRef();
         this.closeAll = this.closeAll.bind(this);
@@ -72,6 +74,7 @@ class Main extends Component {
         this.setState({
             list: [],
             content: '',
+            showText: false
         });
         axios.get(detailUrl(title)).then(res => {
             this.setState({
@@ -82,7 +85,7 @@ class Main extends Component {
     }
 
     render() {
-        let {layerShow, fixSearchBar, contentThen, list, value, isBgGrey, content, contentWidth, showBackTop} = this.state;
+        let {layerShow, fixSearchBar, contentThen, list, value, isBgGrey, content, contentWidth, showBackTop, showText} = this.state;
         return (
             <div className={'container'}
                  ref={this.container}
@@ -142,9 +145,11 @@ class Main extends Component {
                             </div>
                         </div>
 
-                        <div className="layer_text" style={{
-                            display: list.length === 0 && content === "" ? 'block' : 'none'
-                        }}>
+                        <div className="layer_text"
+                             style={{
+                                 display: showText ? "block" : "none"
+                             }}
+                        >
                             Quickly switch to command
                         </div>
                     </div>
@@ -163,7 +168,12 @@ class Main extends Component {
                                    type={"text"}
                                    value={value}
                                    onFocus={(e) => {
-                                       console.log('onfocus');
+                                       console.log(this.state);
+                                       if (content === "" && list.length === 0) {
+                                           this.setState({
+                                               showText: true
+                                           })
+                                       }
                                        this.setState({
                                            layerShow: true,
                                            fixSearchBar: true,
@@ -181,9 +191,12 @@ class Main extends Component {
                                        if (value !== "") {
                                            axios.get(selectUrl(value)).then(res => {
                                                this.setState({
-                                                   list: res.data
+                                                   list: res.data,
+                                                   showText: false
                                                })
                                            })
+                                       } else {
+                                           this.setState({showText: true})
                                        }
                                    }}
                             />

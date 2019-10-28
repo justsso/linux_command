@@ -12,16 +12,12 @@ const {Content, Footer} = Layout;
 function App() {
     return (
         <Router>
-            <Layout>
-                <Content style={{background: '#fff'}}>
-                    <Switch>
-                        <Route path="/search" exact children={<Main/>}/>
-                        <Route path={"/first"} exact children={<Index/>}/>
-                        <Route path={'/home'} exact children={<Home/>}/>
-                        <Route path={'/'} exact children={<Search/>}/>
-                    </Switch>
-                </Content>
-            </Layout>
+            <Switch>
+                <Route path="/" exact children={<Main/>}/>
+                <Route path={"/first"} exact children={<Index/>}/>
+                <Route path={'/home'} exact children={<Home/>}/>
+                <Route path={'/search'} exact children={<Search/>}/>
+            </Switch>
         </Router>
     );
 }

@@ -12,7 +12,7 @@
     "highlight.js": "^9.15.10",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "markdown-it": "^10.0.0",
     "marked": "^0.7.0",
     "query-string": "^6.8.3",

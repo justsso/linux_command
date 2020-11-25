@@ -9,7 +9,7 @@
     "babel-plugin-import": "^1.12.2",
     "clsx": "^1.0.4",
     "customize-cra": "^0.8.0",
-    "highlight.js": "^9.15.10",
+    "highlight.js": "^10.1.2",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "lodash": "^4.17.15",
